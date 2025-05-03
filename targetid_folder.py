@@ -2,7 +2,7 @@ import os
 import csv
 
 def extract_target_app_id(file_path):
-    """Report.wer dosyasindan TargetAppId satirini okuyup SHA-1 hash ve dosya adini çikarir."""
+    """Reads Report.wer file and extracts SHA-1 value and file name from TargetAppId line"""
     try:
         with open(file_path, "r", encoding="utf-16") as f:
             for line in f:
@@ -10,22 +10,22 @@ def extract_target_app_id(file_path):
                     target_app_id = line.strip().replace("\r", "").replace("\n", "").replace(" ", "")
                     target_app_id = target_app_id.split("=", 1)[1]
                     
-                    # "!" işaretine göre parçala
-                    parçalar = target_app_id.split("!")
-                    if len(parçalar) >= 3:
-                        sha1_hash = parçalar[-2]  # SHA-1 hash değeri
-                        filename = parçalar[-1]  # Dosya adi
+                    # parse by "!" sign
+                    parts = target_app_id.split("!")
+                    if len(parts) >= 3:
+                        sha1_hash = parts[-2]  # SHA-1 hash value
+                        filename = parts[-1]  # File name
                         return target_app_id, sha1_hash
     except Exception as e:
-        print(f"Hata: {e}")
+        print(f"Error: {e}")
 
     return None, None
 
 def process_wer_files(base_dir, output_csv):
-    """WER klasör yapisini tarar ve Report.wer dosyalarini analiz edip CSV'ye kaydeder."""
+    """scan WER folder, analyse Report.wer files then save results to a CSV file ."""
     with open(output_csv, "w", newline="", encoding="utf-8") as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow(["Dizin Yolu", "TargetAppId", "SHA-1 Hash"])
+        writer.writerow(["Folder Path Yolu", "TargetAppId", "SHA-1 Hash"])
 
         for root, _, files in os.walk(base_dir):
             for file in files:
@@ -35,11 +35,11 @@ def process_wer_files(base_dir, output_csv):
 
                     if target_app_id and sha1_hash:
                         writer.writerow([file_path, target_app_id, sha1_hash])
-                        print(f"Kayit eklendi: {file_path}")
+                        print(f"Record added: {file_path}")
                     
-    print(f"\nTamamlandi! CSV dosyasi: {output_csv}")
+    print(f"\Completed! CSV file: {output_csv}")
 
-# Kullanim
-base_directory = r"WER\ReportArchive"  # Klasör yapisinin ana dizini
-output_file = "wer_reports.csv"  # Çikti CSV dosyasi
+# Usage
+base_directory = r"WER\ReportArchive"  # base folder
+output_file = "wer_reports.csv"  # CSV file
 process_wer_files(base_directory, output_file)
