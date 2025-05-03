@@ -24,9 +24,9 @@ Every valid Report.wer file entry is recorded into the CSV file.
 
 Logging Progress:
 
-As each file is processed, it prints Kayıt eklendi: {file_path} to track progress.
+As each file is processed, it prints Record added: {file_path} to track progress.
 
-When all files are processed, it displays "Tamamlandı! CSV dosyası: wer_reports.csv"
+When all files are processed, it displays "Completed! CSV file: wer_reports.csv"
 
 Summary
 This script automates collecting forensic data from multiple WER\ReportArchive\ folders and stores useful details (TargetAppId, SHA-1 hash) in a structured CSV format. You can use this data for further analysis or forensic investigations.
