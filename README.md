@@ -1,3 +1,7 @@
+Usage: python .\targetid_folder.py  //for folder
+       python .\targetid.py         //for single file
+
+
 Here's what the code does:
 
 Scanning Directories:
